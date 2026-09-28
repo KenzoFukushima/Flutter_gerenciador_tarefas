@@ -56,7 +56,42 @@ class _HomePageState extends State<HomePage> {
           "Minhas Tarefas",
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: colors.primary,
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+             DrawerHeader(
+              decoration: BoxDecoration(
+                color: colors.primary,
+              ),
+              child: Text(
+                'Menu Principal',
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
+            ),
+
+            ListTile(
+              leading: const Icon(Icons.assignment_turned_in_outlined),
+              title: const Text('Tarefas'),
+              onTap: () {
+                Navigator.pop(context); 
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.assessment_outlined),
+              title: const Text('categorias'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.assessment_outlined),
+              title: const Text('sair'),
+            ),
+          ],
+        ),
       ),
       body: Column(
         children: [
