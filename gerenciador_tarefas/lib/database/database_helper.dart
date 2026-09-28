@@ -16,6 +16,19 @@ class DatabaseHelper {
 
   Future _createDb(Database db, int version) async {
     await db.execute('''
+    CREATE TABLE usuarios
+      (id INTEGER PRIMARY KEY AUTOINCREMENT,
+      email TEXT NOT NULL,
+      senha TEXT NOT NULL,
+      )''');
+
+    await db.execute('''
+    CREATE TABLE categorias
+      (id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome TEXT NOT NULL,
+      )''');
+
+    await db.execute('''
       CREATE TABLE tarefas (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         titulo TEXT NOT NULL,
@@ -24,8 +37,16 @@ class DatabaseHelper {
         categoria TEXT NOT NULL,
         prazo TEXT NOT NULL,
         concluida INTEGER NOT NULL
+        usuario_id INTEGER,
+        FOREIGN KEY (usuario_id) REFERENCES tarefas (id) ON UPDATE CASCADE
+        categoria_id INTEGER,
+        FOREIGN KEY (categoria_id) REFERENCES categorias (id) ON UPDATE CASCADE
       )
     ''');
+  }
+
+  Future _onConfigure(Database db) async {
+    await db.execute('PRAGMA foreign_keys = ON');
   }
 
   Future<Database> get database async => _database ??= await _initDatabase();
@@ -33,6 +54,11 @@ class DatabaseHelper {
   Future<Database> _initDatabase() async {
     Directory documentsDir = await getApplicationCacheDirectory();
     String path = join(documentsDir.path, _dbName);
-    return openDatabase(path, onCreate: _createDb, version: _version);
+    return openDatabase(
+      path,
+      onCreate: _createDb,
+      onConfigure: _onConfigure,
+      version: _version,
+    );
   }
 }
