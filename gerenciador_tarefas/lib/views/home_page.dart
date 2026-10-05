@@ -3,7 +3,7 @@ import 'package:gerenciador_tarefas/dao/tarefaDao.dart';
 import 'package:gerenciador_tarefas/model/Tarefa.dart';
 import 'package:gerenciador_tarefas/views/tarefa/add_tarefa.dart';
 import 'package:gerenciador_tarefas/views/categoria/categoriaPage.dart';
-import 'package:gerenciador_tarefas/views/categoria_item.dart';
+import 'package:gerenciador_tarefas/views/categoria/categoria_item.dart';
 import 'package:gerenciador_tarefas/views/tarefa/tarefa_item.dart';
 
 class HomePage extends StatefulWidget {

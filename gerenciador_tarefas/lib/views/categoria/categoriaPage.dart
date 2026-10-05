@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_tarefas/dao/CategoriaDao.dart';
 import 'package:gerenciador_tarefas/model/Categoria.dart';
-import 'package:gerenciador_tarefas/views/categoria_item.dart';
+import 'package:gerenciador_tarefas/views/categoria/categoria_item.dart';
 
 class CategoriaPage extends StatefulWidget {
   const CategoriaPage({super.key});
