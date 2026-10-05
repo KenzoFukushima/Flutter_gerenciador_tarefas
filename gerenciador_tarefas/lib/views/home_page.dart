@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_tarefas/dao/tarefaDao.dart';
 import 'package:gerenciador_tarefas/model/Tarefa.dart';
-import 'package:gerenciador_tarefas/views/add_tarefa.dart';
-import 'package:gerenciador_tarefas/views/tarefa_item.dart';
+import 'package:gerenciador_tarefas/views/tarefa/add_tarefa.dart';
+import 'package:gerenciador_tarefas/views/categoria/categoriaPage.dart';
+import 'package:gerenciador_tarefas/views/categoria/categoria_item.dart';
+import 'package:gerenciador_tarefas/views/tarefa/tarefa_item.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -56,7 +58,49 @@ class _HomePageState extends State<HomePage> {
           "Minhas Tarefas",
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: colors.primary,
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+             DrawerHeader(
+              decoration: BoxDecoration(
+                color: colors.primary,
+              ),
+              child: Text(
+                'Menu Principal',
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
+            ),
+
+            ListTile(
+              leading: const Icon(Icons.assignment_turned_in_outlined),
+              title: const Text('Tarefas'),
+              onTap: () {
+                Navigator.pop(context); 
+              },
+
+
+            ),
+            ListTile(
+              leading: const Icon(Icons.assessment_outlined),
+              title: const Text('categorias'),
+              onTap: () async{
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CategoriaPage(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.assessment_outlined),
+              title: const Text('sair'),
+            ),
+          ],
+        ),
       ),
       body: Column(
         children: [

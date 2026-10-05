@@ -7,7 +7,6 @@ class CategoriaDao {
 
   static final CategoriaDao instance = CategoriaDao._();
 
-  // R - Read
   Future<List<Categoria>> getCategorias() async {
     Database db = await DatabaseHelper.instance.database;
 
@@ -21,7 +20,7 @@ class CategoriaDao {
         .toList();
   }
 
-  // C - Create
+
   Future<int> add(Categoria novaCategoria) async {
     Database db = await DatabaseHelper.instance.database;
 
@@ -31,7 +30,6 @@ class CategoriaDao {
     );
   }
 
-  // D - Delete
   Future<int> remove(Categoria categoria) async {
     Database db = await DatabaseHelper.instance.database;
 
@@ -42,7 +40,7 @@ class CategoriaDao {
     );
   }
 
-  // U - Update
+
   Future<int> update(Categoria categoria) async {
     Database db = await DatabaseHelper.instance.database;
 

@@ -1,7 +1,7 @@
   import 'package:flutter/material.dart';
   import 'package:gerenciador_tarefas/dao/tarefaDao.dart';
   import 'package:gerenciador_tarefas/model/Tarefa.dart';
-  import 'package:gerenciador_tarefas/views/add_tarefa.dart';
+  import 'package:gerenciador_tarefas/views/tarefa/add_tarefa.dart';
 
   class TarefaItem extends StatefulWidget {
     final Tarefa tarefa;
