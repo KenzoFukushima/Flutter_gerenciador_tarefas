@@ -19,13 +19,13 @@ class DatabaseHelper {
     CREATE TABLE usuarios
       (id INTEGER PRIMARY KEY AUTOINCREMENT,
       email TEXT NOT NULL,
-      senha TEXT NOT NULL,
+      senha TEXT NOT NULL
       )''');
 
     await db.execute('''
     CREATE TABLE categorias
       (id INTEGER PRIMARY KEY AUTOINCREMENT,
-      nome TEXT NOT NULL,
+      nome TEXT NOT NULL
       )''');
 
     await db.execute('''
@@ -36,10 +36,10 @@ class DatabaseHelper {
         prioridade TEXT NOT NULL,
         categoria TEXT NOT NULL,
         prazo TEXT NOT NULL,
-        concluida INTEGER NOT NULL
+        concluida INTEGER NOT NULL,
         usuario_id INTEGER,
-        FOREIGN KEY (usuario_id) REFERENCES tarefas (id) ON UPDATE CASCADE
-        categoria_id INTEGER,
+        FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON UPDATE CASCADE,
+        categoria_id INTEGER, 
         FOREIGN KEY (categoria_id) REFERENCES categorias (id) ON UPDATE CASCADE
       )
     ''');
@@ -54,6 +54,7 @@ class DatabaseHelper {
   Future<Database> _initDatabase() async {
     Directory documentsDir = await getApplicationCacheDirectory();
     String path = join(documentsDir.path, _dbName);
+
     return openDatabase(
       path,
       onCreate: _createDb,
