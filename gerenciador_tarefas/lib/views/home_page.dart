@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_tarefas/dao/tarefaDao.dart';
 import 'package:gerenciador_tarefas/model/Tarefa.dart';
-import 'package:gerenciador_tarefas/views/add_tarefa.dart';
-import 'package:gerenciador_tarefas/views/tarefa_item.dart';
+import 'package:gerenciador_tarefas/views/tarefa/add_tarefa.dart';
+import 'package:gerenciador_tarefas/views/categoria/categoriaPage.dart';
+import 'package:gerenciador_tarefas/views/categoria_item.dart';
+import 'package:gerenciador_tarefas/views/tarefa/tarefa_item.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -78,12 +80,19 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.pop(context); 
               },
+
+
             ),
             ListTile(
               leading: const Icon(Icons.assessment_outlined),
               title: const Text('categorias'),
-              onTap: () {
-                Navigator.pop(context);
+              onTap: () async{
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CategoriaPage(),
+                  ),
+                );
               },
             ),
             ListTile(
