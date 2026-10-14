@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_tarefas/model/Categoria.dart';
+import 'package:gerenciador_tarefas/model/Usuario.dart';
 import 'package:gerenciador_tarefas/views/categoria/addCategoria.dart';
 
 class CategoriaItem extends StatefulWidget {
   final Categoria categoria;
+  final Usuario usuario;
   final Function() deleteItem;
   final Function() editItem;
 
   const CategoriaItem({
     super.key,
     required this.categoria,
+    required this.usuario,
     required this.deleteItem,
     required this.editItem,
   });
@@ -53,6 +56,7 @@ class _CategoriaItemState extends State<CategoriaItem> {
                   MaterialPageRoute(
                     builder: (context) => AddCategoria(
                       categoria: widget.categoria,
+                      usuario: widget.usuario,
                     ),
                   ),
                 );

@@ -7,11 +7,13 @@ class CategoriaDao {
 
   static final CategoriaDao instance = CategoriaDao._();
 
-  Future<List<Categoria>> getCategorias() async {
+  Future<List<Categoria>> getCategorias(int usuarioId) async {
     Database db = await DatabaseHelper.instance.database;
 
     final categorias = await db.query(
       'categorias',
+      where: 'usuario_id = ?',
+      whereArgs: [usuarioId],
       orderBy: 'id DESC',
     );
 
@@ -33,11 +35,21 @@ class CategoriaDao {
   Future<int> remove(Categoria categoria) async {
     Database db = await DatabaseHelper.instance.database;
 
-    return await db.delete(
-      'categorias',
-      where: 'id = ?',
-      whereArgs: [categoria.id],
-    );
+    // As tarefas que usavam a categoria ficam sem categoria (mantêm o nome).
+    return await db.transaction((txn) async {
+      await txn.update(
+        'tarefas',
+        {'categoria_id': null},
+        where: 'categoria_id = ?',
+        whereArgs: [categoria.id],
+      );
+
+      return await txn.delete(
+        'categorias',
+        where: 'id = ? AND usuario_id = ?',
+        whereArgs: [categoria.id, categoria.usuarioId],
+      );
+    });
   }
 
 
@@ -47,8 +59,8 @@ class CategoriaDao {
     return await db.update(
       'categorias',
       categoria.toMap(),
-      where: 'id = ?',
-      whereArgs: [categoria.id],
+      where: 'id = ? AND usuario_id = ?',
+      whereArgs: [categoria.id, categoria.usuarioId],
     );
   }
 }

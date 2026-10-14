@@ -3,6 +3,7 @@ import 'package:gerenciador_tarefas/app_drawer.dart';
 import 'package:gerenciador_tarefas/dao/tarefaDao.dart';
 import 'package:gerenciador_tarefas/model/Tarefa.dart';
 import 'package:gerenciador_tarefas/model/Usuario.dart';
+import 'package:gerenciador_tarefas/services/notificacao_service.dart';
 import 'package:gerenciador_tarefas/views/tarefa/add_tarefa.dart';
 import 'package:gerenciador_tarefas/views/tarefa/tarefa_item.dart';
 
@@ -20,15 +21,27 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    carregarTarefas();
+    _iniciar();
   }
 
+  Future<void> _iniciar() async {
+    await carregarTarefas();
+    await NotificacaoService.instance.pedirPermissao();
+    await NotificacaoService.instance.avisarTarefasDeHoje(tarefas);
+  }
+
+  // Também é chamada depois de criar/editar/remover/concluir uma tarefa,
+  // então é aqui que as notificações dos próximos dias são reagendadas.
   Future<void> carregarTarefas() async {
     final lista = await TarefaDao.instance.getTarefas(widget.usuario.id!);
+
+    if (!mounted) return;
 
     setState(() {
       tarefas = lista;
     });
+
+    await NotificacaoService.instance.agendarResumos(lista);
   }
 
   String filtro = 'todas';
