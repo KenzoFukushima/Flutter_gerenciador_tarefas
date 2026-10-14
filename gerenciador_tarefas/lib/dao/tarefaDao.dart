@@ -7,18 +7,22 @@ class TarefaDao {
 
   static final TarefaDao instance = TarefaDao._();
 
-  // R - Read
-  Future<List<Tarefa>> getTarefas() async {
-    Database db = await DatabaseHelper.instance.database;
+Future<List<Tarefa>> getTarefas(int usuarioId) async {
+  Database db = await DatabaseHelper.instance.database;
 
-    var tarefas = await db.query('tarefas', orderBy: 'id DESC');
+  var tarefas = await db.query(
+    'tarefas',
+    where: 'usuario_id = ?',
+    whereArgs: [usuarioId],
+    orderBy: 'id DESC',
+  );
 
-    List<Tarefa> tarefaList = tarefas.isNotEmpty
-        ? tarefas.map((item) => Tarefa.fromMap(item)).toList()
-        : [];
+  List<Tarefa> tarefaList = tarefas.isNotEmpty
+      ? tarefas.map((item) => Tarefa.fromMap(item)).toList()
+      : [];
 
-    return tarefaList;
-  }
+  return tarefaList;
+}
 
   // C - Create
   Future<int> add(Tarefa novaTarefa) async {

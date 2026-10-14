@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:gerenciador_tarefas/app_drawer.dart';
 import 'package:gerenciador_tarefas/dao/CategoriaDao.dart';
 import 'package:gerenciador_tarefas/model/Categoria.dart';
+import 'package:gerenciador_tarefas/model/Usuario.dart';
 import 'package:gerenciador_tarefas/views/categoria/addCategoria.dart';
 import 'package:gerenciador_tarefas/views/categoria/categoria_item.dart';
 
 class CategoriaPage extends StatefulWidget {
-  const CategoriaPage({super.key});
+  final Usuario usuario;
+
+  const CategoriaPage({
+    super.key,
+    required this.usuario,
+  });
 
   @override
   State<CategoriaPage> createState() => _CategoriaPageState();
@@ -29,6 +35,11 @@ class _CategoriaPageState extends State<CategoriaPage> {
     });
   }
 
+  Future<void> deleteCategoria(Categoria categoria) async {
+    await CategoriaDao.instance.remove(categoria);
+    await carregarCategorias();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,11 +50,7 @@ class _CategoriaPageState extends State<CategoriaPage> {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-<<<<<<< HEAD
-
-=======
-      drawer: const AppDrawer(atual: 'categorias'),
->>>>>>> e8e7dcb (criado app_drawer)
+      drawer: AppDrawer(atual: 'categorias', usuario: widget.usuario,),
       body: ListView.builder(
         itemCount: categorias.length,
         itemBuilder: (context, index) {
@@ -52,21 +59,23 @@ class _CategoriaPageState extends State<CategoriaPage> {
           return CategoriaItem(
             categoria: categoria,
 
-            deleteItem: () {
-              // remover depois
-            },
-
-            editItem: () {
-              // editar depois
-            },
+            deleteItem: () => deleteCategoria(categoria),
+            editItem: () => carregarCategorias(),
           );
         },
       ),
-      // floatingActionButton: FloatingActionButton(
-      //     onPressed: () async {
-      //       await Navigator
-      //     },
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddCategoria()),
+          );
+
+          carregarCategorias();
+        },
+
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

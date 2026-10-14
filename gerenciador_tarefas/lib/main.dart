@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gerenciador_tarefas/views/home_page.dart';
+import 'package:gerenciador_tarefas/views/pages/login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
-      home: const HomePage(),
+      home: const LoginPage(),
     );
   }
 }

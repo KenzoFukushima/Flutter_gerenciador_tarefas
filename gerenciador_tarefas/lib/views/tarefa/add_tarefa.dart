@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_tarefas/dao/tarefaDao.dart';
 import 'package:gerenciador_tarefas/model/Tarefa.dart';
+import 'package:gerenciador_tarefas/model/Usuario.dart';
 
 class AddTarefa extends StatefulWidget {
   final Tarefa? tarefa;
+  final Usuario usuario;
 
-  const AddTarefa({super.key, this.tarefa});
+  const AddTarefa({super.key, this.tarefa, required this.usuario});
 
   @override
   State<AddTarefa> createState() => _AddTarefaState();
@@ -51,6 +53,7 @@ class _AddTarefaState extends State<AddTarefa> {
         categoria: _categoria,
         prazo: _prazo!,
         concluida: widget.tarefa?.concluida ?? false,
+        usuarioId: widget.usuario.id!,
       );
 
       if (widget.tarefa == null) {
