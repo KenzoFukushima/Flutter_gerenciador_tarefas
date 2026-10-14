@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:gerenciador_tarefas/app_drawer.dart';
 import 'package:gerenciador_tarefas/dao/tarefaDao.dart';
 import 'package:gerenciador_tarefas/model/Tarefa.dart';
+import 'package:gerenciador_tarefas/model/Usuario.dart';
 import 'package:gerenciador_tarefas/views/tarefa/add_tarefa.dart';
 import 'package:gerenciador_tarefas/views/tarefa/tarefa_item.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final Usuario usuario;
+  const HomePage({super.key, required this.usuario});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -22,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> carregarTarefas() async {
-    final lista = await TarefaDao.instance.getTarefas();
+    final lista = await TarefaDao.instance.getTarefas(widget.usuario.id!);
 
     setState(() {
       tarefas = lista;
@@ -59,7 +61,7 @@ class _HomePageState extends State<HomePage> {
         ),
         backgroundColor: colors.primary,
       ),
-      drawer: const AppDrawer(atual: 'tarefas'),
+      drawer: AppDrawer(atual: 'tarefas', usuario: widget.usuario),
       body: Column(
         children: [
           Container(
@@ -147,6 +149,7 @@ class _HomePageState extends State<HomePage> {
                     tarefa: currentTarefa,
                     deleteItem: () => deleteTarefa(currentTarefa),
                     editItem: () => carregarTarefas(),
+                    usuario: widget.usuario,
                   );
                 },
               ),
@@ -157,7 +160,7 @@ class _HomePageState extends State<HomePage> {
         onPressed: () async {
           await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AddTarefa()),
+            MaterialPageRoute(builder: (context) => AddTarefa(usuario: widget.usuario)),
           );
 
           carregarTarefas();

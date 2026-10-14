@@ -6,6 +6,7 @@ class Tarefa {
   String categoria;
   DateTime prazo;
   bool concluida;
+  int usuarioId;
 
   Tarefa({
     this.id,
@@ -15,6 +16,7 @@ class Tarefa {
     required this.categoria,
     required this.prazo,
     this.concluida = false,
+    required this.usuarioId,
   });
 
   void concluir() {
@@ -29,6 +31,7 @@ class Tarefa {
     categoria: json['categoria'],
     prazo: DateTime.parse(json['prazo']),
     concluida: json['concluida'] == 1,
+    usuarioId: json['usuario_id'] as int,
   );
 
   Map<String, dynamic> toMap() => {
@@ -39,5 +42,6 @@ class Tarefa {
     'categoria': categoria,
     'prazo': prazo.toIso8601String(),
     'concluida': concluida ? 1 : 0,
+    'usuario_id': usuarioId,
   };
 }

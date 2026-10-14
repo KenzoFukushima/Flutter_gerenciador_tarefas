@@ -1,17 +1,21 @@
   import 'package:flutter/material.dart';
   import 'package:gerenciador_tarefas/dao/tarefaDao.dart';
   import 'package:gerenciador_tarefas/model/Tarefa.dart';
+import 'package:gerenciador_tarefas/model/Usuario.dart';
   import 'package:gerenciador_tarefas/views/tarefa/add_tarefa.dart';
 
   class TarefaItem extends StatefulWidget {
     final Tarefa tarefa;
     final Function() deleteItem;
     final Function() editItem;
+    final Usuario usuario;
+
     const TarefaItem({
       super.key,
       required this.tarefa,
       required this.deleteItem,
       required this.editItem,
+      required this.usuario
     });
 
     @override
@@ -87,7 +91,7 @@
                 await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AddTarefa(tarefa: widget.tarefa),
+                    builder: (context) => AddTarefa(tarefa: widget.tarefa, usuario: widget.usuario,),
                   ),
                 );
                 widget.editItem();

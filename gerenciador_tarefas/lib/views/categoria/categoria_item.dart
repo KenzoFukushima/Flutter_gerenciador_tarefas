@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_tarefas/model/Categoria.dart';
+import 'package:gerenciador_tarefas/views/categoria/addCategoria.dart';
 
-class CategoriaItem extends StatelessWidget {
+class CategoriaItem extends StatefulWidget {
   final Categoria categoria;
   final Function() deleteItem;
   final Function() editItem;
@@ -12,6 +13,13 @@ class CategoriaItem extends StatelessWidget {
     required this.deleteItem,
     required this.editItem,
   });
+
+  @override
+  State<CategoriaItem> createState() => _CategoriaItemState();
+}
+
+class _CategoriaItemState extends State<CategoriaItem> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +34,7 @@ class CategoriaItem extends StatelessWidget {
           ),
 
           title: Text(
-            categoria.nome,
+            widget.categoria.nome,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
@@ -36,11 +44,19 @@ class CategoriaItem extends StatelessWidget {
             icon: const Icon(Icons.more_vert),
             onSelected: (value) async {
               if (value == 'remover') {
-                deleteItem();
+                widget.deleteItem();
               }
 
               if (value == 'editar') {
-                editItem();
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddCategoria(
+                      categoria: widget.categoria,
+                    ),
+                  ),
+                );
+                widget.editItem();
               }
             },
             itemBuilder: (BuildContext context) => const [
