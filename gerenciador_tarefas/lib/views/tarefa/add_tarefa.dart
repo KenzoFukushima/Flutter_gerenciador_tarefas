@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gerenciador_tarefas/dao/CategoriaDao.dart';
 import 'package:gerenciador_tarefas/dao/tarefaDao.dart';
+import 'package:gerenciador_tarefas/model/Categoria.dart';
 import 'package:gerenciador_tarefas/model/Tarefa.dart';
 import 'package:gerenciador_tarefas/model/Usuario.dart';
 
@@ -20,7 +22,9 @@ class _AddTarefaState extends State<AddTarefa> {
   final descricaoController = TextEditingController();
 
   String _prioridade = 'Média';
-  String _categoria = 'Escola';
+  List<Categoria> _categorias = [];
+  int? _categoriaId;
+  bool _carregandoCategorias = true;
   DateTime? _prazo;
 
   @override
@@ -38,19 +42,53 @@ class _AddTarefaState extends State<AddTarefa> {
       tituloController.text = widget.tarefa!.titulo;
       descricaoController.text = widget.tarefa!.descricao;
       _prioridade = widget.tarefa!.prioridade;
-      _categoria = widget.tarefa!.categoria;
+      _categoriaId = widget.tarefa!.categoriaId;
       _prazo = widget.tarefa!.prazo;
     }
+
+    _carregarCategorias();
+  }
+
+  Future<void> _carregarCategorias() async {
+    final lista = await CategoriaDao.instance.getCategorias(widget.usuario.id!);
+
+    if (!mounted) return;
+
+    setState(() {
+      _categorias = lista;
+
+      // A categoria da tarefa pode ter sido removida (ou ser de antes das
+      // categorias por usuário): nesse caso a pessoa escolhe de novo.
+      if (!lista.any((c) => c.id == _categoriaId)) {
+        _categoriaId = null;
+      }
+
+      _carregandoCategorias = false;
+    });
   }
 
   Future<void> salvar() async {
     if (_formKey.currentState!.validate()) {
+      final categoriaSelecionada = _categorias
+          .where((c) => c.id == _categoriaId)
+          .firstOrNull;
+
+      if (categoriaSelecionada == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Cadastre e selecione uma categoria para a tarefa'),
+          ),
+        );
+        return;
+      }
+
       final tarefa = Tarefa(
         id: widget.tarefa?.id,
         titulo: tituloController.text,
         descricao: descricaoController.text,
         prioridade: _prioridade,
-        categoria: _categoria,
+        categoria: categoriaSelecionada.nome,
+        categoriaId: categoriaSelecionada.id,
         prazo: _prazo!,
         concluida: widget.tarefa?.concluida ?? false,
         usuarioId: widget.usuario.id!,
@@ -185,27 +223,47 @@ class _AddTarefaState extends State<AddTarefa> {
 
               const SizedBox(height: 16),
 
-              // CATEGORIA
-              DropdownButtonFormField<String>(
-                initialValue: _categoria,
+              // CATEGORIA (apenas as categorias do usuário logado)
+              if (_carregandoCategorias)
+                const Center(child: CircularProgressIndicator())
+              else if (_categorias.isEmpty)
+                const Text(
+                  'Você ainda não tem categorias. Cadastre uma no menu '
+                  '"Categorias" para poder criar tarefas.',
+                  style: TextStyle(color: Colors.grey),
+                )
+              else
+                DropdownButtonFormField<int>(
+                  initialValue: _categoriaId,
 
-                decoration: const InputDecoration(
-                  labelText: 'Categoria',
-                  border: OutlineInputBorder(),
+                  decoration: const InputDecoration(
+                    labelText: 'Categoria',
+                    border: OutlineInputBorder(),
+                  ),
+
+                  items: _categorias
+                      .map(
+                        (c) => DropdownMenuItem<int>(
+                          value: c.id,
+                          child: Text(c.nome),
+                        ),
+                      )
+                      .toList(),
+
+                  onChanged: (value) {
+                    setState(() {
+                      _categoriaId = value;
+                    });
+                  },
+
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Selecione uma categoria';
+                    }
+
+                    return null;
+                  },
                 ),
-
-                items: const [
-                  DropdownMenuItem(value: 'Escola', child: Text('Escola')),
-                  DropdownMenuItem(value: 'Estudos', child: Text('Estudos')),
-                  DropdownMenuItem(value: 'Pessoal', child: Text('Trabalho')),
-                ],
-
-                onChanged: (value) {
-                  setState(() {
-                    _categoria = value!;
-                  });
-                },
-              ),
 
               const SizedBox(height: 16),
 

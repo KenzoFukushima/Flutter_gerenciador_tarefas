@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:gerenciador_tarefas/services/notificacao_service.dart';
 import 'package:gerenciador_tarefas/views/pages/login_page.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificacaoService.instance.init();
   runApp(const MyApp());
 }
 

@@ -37,6 +37,9 @@ import 'package:gerenciador_tarefas/model/Usuario.dart';
               });
 
               await TarefaDao.instance.update(widget.tarefa);
+
+              // Recarrega a lista e reagenda as notificações do dia.
+              widget.editItem();
             },
           ),
 

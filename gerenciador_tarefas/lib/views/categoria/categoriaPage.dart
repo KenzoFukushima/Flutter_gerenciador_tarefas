@@ -28,7 +28,7 @@ class _CategoriaPageState extends State<CategoriaPage> {
   }
 
   Future<void> carregarCategorias() async {
-    final lista = await CategoriaDao.instance.getCategorias();
+    final lista = await CategoriaDao.instance.getCategorias(widget.usuario.id!);
 
     setState(() {
       categorias = lista;
@@ -58,7 +58,7 @@ class _CategoriaPageState extends State<CategoriaPage> {
 
           return CategoriaItem(
             categoria: categoria,
-
+            usuario: widget.usuario,
             deleteItem: () => deleteCategoria(categoria),
             editItem: () => carregarCategorias(),
           );
@@ -68,7 +68,9 @@ class _CategoriaPageState extends State<CategoriaPage> {
         onPressed: () async {
           await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AddCategoria()),
+            MaterialPageRoute(
+              builder: (context) => AddCategoria(usuario: widget.usuario),
+            ),
           );
 
           carregarCategorias();
@@ -78,4 +80,4 @@ class _CategoriaPageState extends State<CategoriaPage> {
       ),
     );
   }
-}
+}

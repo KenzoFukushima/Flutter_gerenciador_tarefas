@@ -23,10 +23,12 @@ class UsuarioDao {
       senha: _hashSenha(novoUsuario.senha),
     );
 
-    return await db.insert(
-      'usuarios',
-      usuario.toMap(),
-    );
+    // Cria o usuário já com as categorias padrão, tudo na mesma transação.
+    return await db.transaction((txn) async {
+      final id = await txn.insert('usuarios', usuario.toMap());
+      await DatabaseHelper.criarCategoriasPadrao(txn, id);
+      return id;
+    });
   }
 
   // Login

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_tarefas/dao/CategoriaDao.dart';
 import 'package:gerenciador_tarefas/model/Categoria.dart';
+import 'package:gerenciador_tarefas/model/Usuario.dart';
 
 class AddCategoria extends StatefulWidget {
   final Categoria? categoria;
-  const AddCategoria({super.key, this.categoria});
+  final Usuario usuario;
+  const AddCategoria({super.key, this.categoria, required this.usuario});
 
   @override
   State<AddCategoria> createState() => _AddCategoriaState();
@@ -21,6 +23,7 @@ class _AddCategoriaState extends State<AddCategoria> {
     final categoria = Categoria(
       id: widget.categoria?.id,
       nome: nomeController.text.trim(),
+      usuarioId: widget.usuario.id!,
     );
 
     if (widget.categoria == null) {
@@ -70,4 +73,4 @@ class _AddCategoriaState extends State<AddCategoria> {
       ),
     );
   }
-}
+}

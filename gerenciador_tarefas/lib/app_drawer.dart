@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gerenciador_tarefas/model/Usuario.dart';
+import 'package:gerenciador_tarefas/services/notificacao_service.dart';
 import 'package:gerenciador_tarefas/views/categoria/categoriaPage.dart';
 import 'package:gerenciador_tarefas/views/pages/home_page.dart';
 import 'package:gerenciador_tarefas/views/pages/login_page.dart';
@@ -57,6 +58,9 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.logout),
             title: const Text('Sair'),
             onTap: () {
+              // As notificações são do usuário que saiu.
+              NotificacaoService.instance.cancelarTudo();
+
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => const LoginPage()),
@@ -68,4 +72,4 @@ class AppDrawer extends StatelessWidget {
       ),
     );
   }
-}
+}

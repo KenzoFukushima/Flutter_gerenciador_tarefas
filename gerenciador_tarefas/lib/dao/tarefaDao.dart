@@ -10,12 +10,14 @@ class TarefaDao {
 Future<List<Tarefa>> getTarefas(int usuarioId) async {
   Database db = await DatabaseHelper.instance.database;
 
-  var tarefas = await db.query(
-    'tarefas',
-    where: 'usuario_id = ?',
-    whereArgs: [usuarioId],
-    orderBy: 'id DESC',
-  );
+  // LEFT JOIN: traz o nome atual da categoria (caso tenha sido renomeada).
+  var tarefas = await db.rawQuery('''
+    SELECT t.*, c.nome AS categoria_nome
+    FROM tarefas t
+    LEFT JOIN categorias c ON c.id = t.categoria_id
+    WHERE t.usuario_id = ?
+    ORDER BY t.id DESC
+  ''', [usuarioId]);
 
   List<Tarefa> tarefaList = tarefas.isNotEmpty
       ? tarefas.map((item) => Tarefa.fromMap(item)).toList()
