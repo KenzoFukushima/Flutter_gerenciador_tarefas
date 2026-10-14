@@ -38,9 +38,16 @@ class DatabaseHelper {
         prazo TEXT NOT NULL,
         concluida INTEGER NOT NULL,
         usuario_id INTEGER,
-        FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON UPDATE CASCADE
-        categoria_id INTEGER, 
+        categoria_id INTEGER,
+<<<<<<< HEAD
+        FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON UPDATE CASCADE,
         FOREIGN KEY (categoria_id) REFERENCES categorias (id) ON UPDATE CASCADE
+=======
+        FOREIGN KEY (usuario_id)
+          REFERENCES usuarios (id) ON UPDATE CASCADE,
+        FOREIGN KEY (categoria_id)
+          REFERENCES categorias (id) ON UPDATE CASCADE
+>>>>>>> e8e7dcb (criado app_drawer)
       )
     ''');
   }

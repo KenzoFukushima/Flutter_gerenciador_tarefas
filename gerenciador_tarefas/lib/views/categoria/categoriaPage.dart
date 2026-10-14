@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gerenciador_tarefas/app_drawer.dart';
 import 'package:gerenciador_tarefas/dao/CategoriaDao.dart';
 import 'package:gerenciador_tarefas/model/Categoria.dart';
+import 'package:gerenciador_tarefas/views/categoria/addCategoria.dart';
 import 'package:gerenciador_tarefas/views/categoria/categoria_item.dart';
 
 class CategoriaPage extends StatefulWidget {
@@ -30,9 +32,18 @@ class _CategoriaPageState extends State<CategoriaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Categorias'),
+            appBar: AppBar(
+        title: const Text(
+          'Categorias',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
+<<<<<<< HEAD
+
+=======
+      drawer: const AppDrawer(atual: 'categorias'),
+>>>>>>> e8e7dcb (criado app_drawer)
       body: ListView.builder(
         itemCount: categorias.length,
         itemBuilder: (context, index) {
@@ -40,15 +51,22 @@ class _CategoriaPageState extends State<CategoriaPage> {
 
           return CategoriaItem(
             categoria: categoria,
+
             deleteItem: () {
-              // remover categoria
+              // remover depois
             },
+
             editItem: () {
-              // editar categoria
+              // editar depois
             },
           );
         },
       ),
+      // floatingActionButton: FloatingActionButton(
+      //     onPressed: () async {
+      //       await Navigator
+      //     },
+      // ),
     );
   }
 }

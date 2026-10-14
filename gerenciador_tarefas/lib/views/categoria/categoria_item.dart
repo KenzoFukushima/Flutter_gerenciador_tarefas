@@ -17,42 +17,44 @@ class CategoriaItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      child: ListTile(
-        leading: const Icon(
-          Icons.category,
-          color: Colors.blue,
-        ),
+      child: 
+      
+        ListTile(
+          leading: const Icon(
+            Icons.category,
+            color: Colors.blue,
+          ),
 
-        title: Text(
-          categoria.nome,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
+          title: Text(
+            categoria.nome,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          trailing: PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert),
+            onSelected: (value) async {
+              if (value == 'remover') {
+                deleteItem();
+              }
+
+              if (value == 'editar') {
+                editItem();
+              }
+            },
+            itemBuilder: (BuildContext context) => const [
+              PopupMenuItem<String>(
+                value: 'editar',
+                child: Text('Editar'),
+              ),
+              PopupMenuItem<String>(
+                value: 'remover',
+                child: Text('Remover'),
+              ),
+            ],
           ),
         ),
-
-        trailing: PopupMenuButton<String>(
-          icon: const Icon(Icons.more_vert),
-          onSelected: (value) async {
-            if (value == 'remover') {
-              deleteItem();
-            }
-
-            if (value == 'editar') {
-              editItem();
-            }
-          },
-          itemBuilder: (BuildContext context) => const [
-            PopupMenuItem<String>(
-              value: 'editar',
-              child: Text('Editar'),
-            ),
-            PopupMenuItem<String>(
-              value: 'remover',
-              child: Text('Remover'),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
