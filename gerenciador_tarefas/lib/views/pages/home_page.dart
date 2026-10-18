@@ -25,9 +25,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _iniciar() async {
-    await carregarTarefas();
+    await NotificacaoService.instance.init();
     await NotificacaoService.instance.pedirPermissao();
-    await NotificacaoService.instance.avisarTarefasDeHoje(tarefas);
+    await carregarTarefas();
   }
 
   // Também é chamada depois de criar/editar/remover/concluir uma tarefa,
@@ -42,6 +42,8 @@ class _HomePageState extends State<HomePage> {
     });
 
     await NotificacaoService.instance.agendarResumos(lista);
+
+    await NotificacaoService.instance.avisarTarefasDeHoje(lista);
   }
 
   String filtro = 'todas';
