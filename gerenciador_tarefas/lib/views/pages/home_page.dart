@@ -41,7 +41,6 @@ class _HomePageState extends State<HomePage> {
       tarefas = lista;
     });
 
-    await NotificacaoService.instance.agendarResumos(lista);
 
     await NotificacaoService.instance.avisarTarefasDeHoje(lista);
   }

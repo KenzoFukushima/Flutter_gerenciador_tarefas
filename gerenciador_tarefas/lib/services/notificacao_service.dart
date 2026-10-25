@@ -29,50 +29,6 @@ class NotificacaoService {
         ?.requestNotificationsPermission();
   }
 
-  Future<void> agendarResumos(List<Tarefa> tarefas) async {
-    final agora = DateTime.now();
-
-    // Agenda os próximos 7 dias, às 8h.
-    for (int i = 0; i < 7; i++) {
-      final dia = DateTime(agora.year, agora.month, agora.day + i);
-
-      final pendentes = tarefas
-          .where(
-            (t) =>
-                !t.concluida &&
-                t.prazo.year == dia.year &&
-                t.prazo.month == dia.month &&
-                t.prazo.day == dia.day,
-          )
-          .toList();
-
-      await plugin.cancel(id: 1000 + i);
-
-      final horario = DateTime(dia.year, dia.month, dia.day, 8);
-
-      if (pendentes.isEmpty || !horario.isAfter(agora)) {
-        continue;
-      }
-
-      await plugin.zonedSchedule(
-        id: 1000 + i,
-        title: '${pendentes.length} tarefa(s) pendente(s)',
-        body: pendentes.map((t) => t.titulo).join(', '),
-        scheduledDate: tz.TZDateTime.from(horario, tz.local),
-        notificationDetails: const NotificationDetails(
-          android: AndroidNotificationDetails(
-            'tarefas',
-            'Tarefas',
-            channelDescription: 'Lembretes de tarefas pendentes',
-            importance: Importance.high,
-            priority: Priority.high,
-          ),
-        ),
-        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-      );
-    }
-  }
-
   Future<void> cancelarTudo() async {
     await plugin.cancelAll();
   }
