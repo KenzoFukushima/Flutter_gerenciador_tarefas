@@ -30,8 +30,6 @@ class _HomePageState extends State<HomePage> {
     await carregarTarefas();
   }
 
-  // Também é chamada depois de criar/editar/remover/concluir uma tarefa,
-  // então é aqui que as notificações dos próximos dias são reagendadas.
   Future<void> carregarTarefas() async {
     final lista = await TarefaDao.instance.getTarefas(widget.usuario.id!);
 
@@ -41,7 +39,6 @@ class _HomePageState extends State<HomePage> {
       tarefas = lista;
     });
 
-    await NotificacaoService.instance.agendarResumos(lista);
 
     await NotificacaoService.instance.avisarTarefasDeHoje(lista);
   }

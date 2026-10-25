@@ -14,7 +14,7 @@ class UsuarioDao {
     return sha256.convert(utf8.encode(senha)).toString();
   }
 
-  // C - Create
+  
   Future<int> add(Usuario novoUsuario) async {
     Database db = await DatabaseHelper.instance.database;
 
@@ -23,7 +23,7 @@ class UsuarioDao {
       senha: _hashSenha(novoUsuario.senha),
     );
 
-    // Cria o usuário já com as categorias padrão, tudo na mesma transação.
+
     return await db.transaction((txn) async {
       final id = await txn.insert('usuarios', usuario.toMap());
       await DatabaseHelper.criarCategoriasPadrao(txn, id);
@@ -31,7 +31,6 @@ class UsuarioDao {
     });
   }
 
-  // Login
   Future<Usuario?> login(String email, String senha) async {
     Database db = await DatabaseHelper.instance.database;
 
@@ -50,7 +49,6 @@ class UsuarioDao {
     return null;
   }
 
-  // Verifica se o e-mail já existe
   Future<bool> emailExiste(String email) async {
     Database db = await DatabaseHelper.instance.database;
 
@@ -61,5 +59,11 @@ class UsuarioDao {
     );
 
     return usuarios.isNotEmpty;
+  }
+
+    Future<Usuario?> getPorId(int id) async {
+      Database db = await DatabaseHelper.instance.database;
+      var r = await db.query('usuarios', where: 'id = ?', whereArgs: [id]);
+      return r.isNotEmpty ? Usuario.fromMap(r.first) : null;
   }
 }
