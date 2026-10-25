@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gerenciador_tarefas/dao/UsuarioDao.dart';
 import 'package:gerenciador_tarefas/views/pages/cadastro_page.dart';
 import 'package:gerenciador_tarefas/views/pages/home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lottie/lottie.dart';
 
 class LoginPage extends StatefulWidget {
@@ -41,12 +42,18 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('usuario_id', usuario.id!);
+
+    if (!mounted) return;
+
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => HomePage(usuario: usuario)),
+      MaterialPageRoute(
+        builder: (context) => HomePage(usuario: usuario),
+      ),
     );
   }
-
   void mostrarMensagem(String texto) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(texto)));
   }
