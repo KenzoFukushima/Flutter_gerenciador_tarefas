@@ -5,6 +5,7 @@ import 'package:gerenciador_tarefas/services/notificacao_service.dart';
 import 'package:gerenciador_tarefas/views/categoria/categoriaPage.dart';
 import 'package:gerenciador_tarefas/views/pages/home_page.dart';
 import 'package:gerenciador_tarefas/views/pages/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppDrawer extends StatelessWidget {
   final String atual;
@@ -57,9 +58,12 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Sair'),
-            onTap: () {
+            onTap: () async {
               // As notificações são do usuário que saiu.
               NotificacaoService.instance.cancelarTudo();
+
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.remove('usuario_id');
 
               Navigator.pushAndRemoveUntil(
                 context,
@@ -72,4 +76,4 @@ class AppDrawer extends StatelessWidget {
       ),
     );
   }
-}
+}
